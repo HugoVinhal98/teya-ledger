@@ -21,3 +21,6 @@ rad.json
 #Test results file
 TestResults.xml
 /.idea/
+/build/
+/.gradle/
+.kotlin/
