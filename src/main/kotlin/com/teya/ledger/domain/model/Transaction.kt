@@ -18,8 +18,8 @@ data class Transaction(
     }
 
     private fun validateAmount() {
-        if (amount <= BigDecimal.ZERO) {
-            throw IllegalArgumentException("Transaction amount must be greater than zero")
+        if (balanceAfter < BigDecimal.ZERO) {
+            throw InsufficientFundsException(amount)
         }
     }
 }

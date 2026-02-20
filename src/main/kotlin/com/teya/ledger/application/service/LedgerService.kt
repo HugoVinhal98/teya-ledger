@@ -11,7 +11,7 @@ class LedgerService(
     private val ledgerRepository: LedgerRepository,
     private val transactionFactory: TransactionFactory
 ) {
-    fun recordTransaction(command: RecordTransactionCommand): RecordTransactionResponse {
+    fun recordTransaction(command: RecordTransactionCommand): TransactionResponse {
         val currentBalance = ledgerRepository.getBalance()
 
         // Create transaction domain object using factory (returns validated)
@@ -25,7 +25,7 @@ class LedgerService(
         ledgerRepository.save(validatedTransaction)
 
         val transaction = validatedTransaction.unwrap()
-        return RecordTransactionResponse(
+        return TransactionResponse(
             transactionId = transaction.id,
             type = transaction.type,
             amount = transaction.amount,
@@ -45,7 +45,7 @@ class LedgerService(
         val transactions = ledgerRepository.getTransactionHistory()
         return TransactionHistoryResponse(
             transactions = transactions.map { transaction ->
-                TransactionDto(
+                TransactionResponse(
                     transactionId = transaction.id,
                     type = transaction.type,
                     amount = transaction.amount,

@@ -6,10 +6,10 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class TransactionHistoryResponse(
-    val transactions: List<TransactionDto>
+    val transactions: List<TransactionResponse>
 )
 
-data class TransactionDto(
+data class TransactionResponse(
     val transactionId: UUID,
     val type: TransactionType,
     val amount: BigDecimal,

@@ -2,8 +2,8 @@ package com.teya.ledger.presentation.controller
 
 import com.teya.ledger.application.command.RecordTransactionCommand
 import com.teya.ledger.application.dto.BalanceResponse
-import com.teya.ledger.application.dto.RecordTransactionResponse
 import com.teya.ledger.application.dto.TransactionHistoryResponse
+import com.teya.ledger.application.dto.TransactionResponse
 import com.teya.ledger.application.service.LedgerService
 import com.teya.ledger.presentation.dto.RecordTransactionApiRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -29,7 +29,7 @@ class LedgerController(
             ApiResponse(responseCode = "400", description = "Invalid request or insufficient funds")
         ]
     )
-    fun recordTransaction(@Valid @RequestBody request: RecordTransactionApiRequest): RecordTransactionResponse {
+    fun recordTransaction(@Valid @RequestBody request: RecordTransactionApiRequest): TransactionResponse {
         val command = toCommand(request)
         return ledgerService.recordTransaction(command)
     }
