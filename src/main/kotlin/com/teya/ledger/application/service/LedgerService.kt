@@ -3,7 +3,6 @@ package com.teya.ledger.application.service
 import com.teya.ledger.application.command.RecordTransactionCommand
 import com.teya.ledger.application.dto.*
 import com.teya.ledger.domain.factory.TransactionFactory
-import com.teya.ledger.domain.model.TransactionType
 import com.teya.ledger.domain.repository.LedgerRepository
 import org.springframework.stereotype.Service
 
@@ -15,17 +14,11 @@ class LedgerService(
     fun recordTransaction(command: RecordTransactionCommand): RecordTransactionResponse {
         val currentBalance = ledgerRepository.getBalance()
 
-        // Calculate new balance based on transaction type
-        val newBalance = when (command.type) {
-            TransactionType.DEPOSIT -> currentBalance.add(command.amount)
-            TransactionType.WITHDRAWAL -> currentBalance.subtract(command.amount)
-        }
-
         // Create transaction domain object using factory (returns validated)
         val validatedTransaction = transactionFactory.create(
             type = command.type,
             amount = command.amount,
-            balanceAfter = newBalance
+            currentBalance = currentBalance
         )
 
         // Save transaction
