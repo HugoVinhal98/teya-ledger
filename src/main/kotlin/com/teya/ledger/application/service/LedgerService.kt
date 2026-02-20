@@ -1,5 +1,6 @@
 package com.teya.ledger.application.service
 
+import com.teya.ledger.application.command.RecordTransactionCommand
 import com.teya.ledger.application.dto.*
 import com.teya.ledger.domain.exception.InsufficientFundsException
 import com.teya.ledger.domain.model.Transaction
@@ -14,30 +15,30 @@ import java.util.UUID
 class LedgerService(
     private val ledgerRepository: LedgerRepository
 ) {
-    fun recordTransaction(request: RecordTransactionRequest): RecordTransactionResponse {
+    fun recordTransaction(command: RecordTransactionCommand): RecordTransactionResponse {
         val currentBalance = ledgerRepository.getBalance()
 
-        // Validate business rules
-        if (request.type == TransactionType.WITHDRAWAL && currentBalance < request.amount) {
-            throw InsufficientFundsException(currentBalance = currentBalance, requestedAmount = request.amount)
+        // Business rule validation - withdrawal specific
+        if (command.type == TransactionType.WITHDRAWAL && currentBalance < command.amount) {
+            throw InsufficientFundsException(currentBalance = currentBalance, requestedAmount = command.amount)
         }
 
         // Calculate new balance based on transaction type
-        val newBalance = when (request.type) {
-            TransactionType.DEPOSIT -> currentBalance.add(request.amount)
-            TransactionType.WITHDRAWAL -> currentBalance.subtract(request.amount)
+        val newBalance = when (command.type) {
+            TransactionType.DEPOSIT -> currentBalance.add(command.amount)
+            TransactionType.WITHDRAWAL -> currentBalance.subtract(command.amount)
         }
 
         // Create transaction domain object
         val transaction = Transaction(
             id = UUID.randomUUID(),
-            type = request.type,
-            amount = request.amount,
+            type = command.type,
+            amount = command.amount,
             timestamp = LocalDateTime.now(),
             balanceAfter = newBalance
         )
 
-        // Save transaction and update balance
+        // Save transaction
         ledgerRepository.save(transaction)
 
         return RecordTransactionResponse(

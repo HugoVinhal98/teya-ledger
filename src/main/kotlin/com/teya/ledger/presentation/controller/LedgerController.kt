@@ -1,14 +1,16 @@
 package com.teya.ledger.presentation.controller
 
+import com.teya.ledger.application.command.RecordTransactionCommand
 import com.teya.ledger.application.dto.BalanceResponse
-import com.teya.ledger.application.dto.RecordTransactionRequest
 import com.teya.ledger.application.dto.RecordTransactionResponse
 import com.teya.ledger.application.dto.TransactionHistoryResponse
 import com.teya.ledger.application.service.LedgerService
+import com.teya.ledger.presentation.dto.RecordTransactionApiRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -24,11 +26,12 @@ class LedgerController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Transaction recorded successfully"),
-            ApiResponse(responseCode = "400", description = "Insufficient funds for withdrawal")
+            ApiResponse(responseCode = "400", description = "Invalid request or insufficient funds")
         ]
     )
-    fun recordTransaction(@RequestBody request: RecordTransactionRequest): RecordTransactionResponse {
-        return ledgerService.recordTransaction(request)
+    fun recordTransaction(@Valid @RequestBody request: RecordTransactionApiRequest): RecordTransactionResponse {
+        val command = toCommand(request)
+        return ledgerService.recordTransaction(command)
     }
 
     @GetMapping("/balance")
@@ -43,5 +46,12 @@ class LedgerController(
     @ApiResponse(responseCode = "200", description = "Transaction history retrieved successfully")
     fun getTransactionHistory(): TransactionHistoryResponse {
         return ledgerService.getTransactionHistory()
+    }
+
+    private fun toCommand(request: RecordTransactionApiRequest): RecordTransactionCommand {
+        return RecordTransactionCommand(
+            type = request.type,
+            amount = request.amount
+        )
     }
 }
