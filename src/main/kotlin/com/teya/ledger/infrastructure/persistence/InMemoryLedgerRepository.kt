@@ -14,8 +14,10 @@ class InMemoryLedgerRepository : LedgerRepository {
     override fun save(transaction: Validated<Transaction>) {
         val unwrappedTransaction = transaction.unwrap()
         transactions.add(unwrappedTransaction)
+    }
 
-        balance = unwrappedTransaction.balanceAfter
+    override fun updateBalance(balance: BigDecimal) {
+        this.balance = balance
     }
 
     override fun getBalance(): BigDecimal {

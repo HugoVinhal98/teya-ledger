@@ -14,5 +14,4 @@ data class TransactionResponse(
     val type: TransactionType,
     val amount: BigDecimal,
     val timestamp: LocalDateTime,
-    val balanceAfter: BigDecimal
 )
