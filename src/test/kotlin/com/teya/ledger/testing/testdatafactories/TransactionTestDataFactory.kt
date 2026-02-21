@@ -32,4 +32,15 @@ object TransactionTestDataFactory {
         amount = amount,
         timestamp = timestamp,
     ))
+
+    fun createValidDeposit(
+        id: UUID = UUID.randomUUID(),
+        amount: BigDecimal = BigDecimal.TWO,
+        timestamp: LocalDateTime = LocalDateTime.now(),
+    ) = createValid(
+        id = id,
+        type = TransactionType.DEPOSIT,
+        amount = amount,
+        timestamp = timestamp,
+    )
 }

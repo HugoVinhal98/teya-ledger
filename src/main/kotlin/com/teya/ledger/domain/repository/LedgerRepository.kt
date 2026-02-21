@@ -7,6 +7,5 @@ import java.math.BigDecimal
 interface LedgerRepository {
     fun save(transaction: Validated<Transaction>)
     fun getBalance(): BigDecimal
-    fun updateBalance(balance: BigDecimal)
     fun getTransactionHistory(): List<Transaction>
 }

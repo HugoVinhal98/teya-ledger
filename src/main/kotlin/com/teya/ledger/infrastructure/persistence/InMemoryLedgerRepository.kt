@@ -1,6 +1,8 @@
 package com.teya.ledger.infrastructure.persistence
 
+import com.teya.ledger.domain.exception.InsufficientFundsException
 import com.teya.ledger.domain.model.Transaction
+import com.teya.ledger.domain.model.TransactionType
 import com.teya.ledger.domain.repository.LedgerRepository
 import com.teya.ledger.domain.validation.Validated
 import org.springframework.stereotype.Repository
@@ -13,11 +15,17 @@ class InMemoryLedgerRepository : LedgerRepository {
 
     override fun save(transaction: Validated<Transaction>) {
         val unwrappedTransaction = transaction.unwrap()
-        transactions.add(unwrappedTransaction)
-    }
+        val updatedBalance = when (unwrappedTransaction.type) {
+            TransactionType.DEPOSIT -> balance.add(unwrappedTransaction.amount)
+            TransactionType.WITHDRAWAL -> balance.subtract(unwrappedTransaction.amount)
+        }
 
-    override fun updateBalance(balance: BigDecimal) {
-        this.balance = balance
+        if (updatedBalance < BigDecimal.ZERO) {
+            throw InsufficientFundsException(unwrappedTransaction.amount)
+        }
+
+        balance = updatedBalance
+        transactions.add(unwrappedTransaction)
     }
 
     override fun getBalance(): BigDecimal {
