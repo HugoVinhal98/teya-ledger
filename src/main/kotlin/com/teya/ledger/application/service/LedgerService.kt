@@ -2,6 +2,7 @@ package com.teya.ledger.application.service
 
 import com.teya.ledger.application.command.RecordTransactionCommand
 import com.teya.ledger.application.dto.*
+import com.teya.ledger.application.mapper.TransactionMapper
 import com.teya.ledger.domain.factory.TransactionFactory
 import com.teya.ledger.domain.repository.LedgerRepository
 import org.springframework.stereotype.Service
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Service
 @Service
 class LedgerService(
     private val ledgerRepository: LedgerRepository,
-    private val transactionFactory: TransactionFactory
+    private val transactionFactory: TransactionFactory,
+    private val transactionMapper: TransactionMapper
 ) {
     fun recordTransaction(command: RecordTransactionCommand): TransactionResponse {
         val currentBalance = ledgerRepository.getBalance()
@@ -25,13 +27,7 @@ class LedgerService(
         ledgerRepository.save(validatedTransaction)
 
         val transaction = validatedTransaction.unwrap()
-        return TransactionResponse(
-            transactionId = transaction.id,
-            type = transaction.type,
-            amount = transaction.amount,
-            timestamp = transaction.timestamp,
-            updatedBalance = transaction.updatedBalance
-        )
+        return transactionMapper.toResponse(transaction)
     }
 
     fun getBalance(): BalanceResponse {
@@ -45,13 +41,7 @@ class LedgerService(
         val transactions = ledgerRepository.getTransactionHistory()
         return TransactionHistoryResponse(
             transactions = transactions.map { transaction ->
-                TransactionResponse(
-                    transactionId = transaction.id,
-                    type = transaction.type,
-                    amount = transaction.amount,
-                    timestamp = transaction.timestamp,
-                    updatedBalance = transaction.updatedBalance
-                )
+                transactionMapper.toResponse(transaction)
             }
         )
     }
