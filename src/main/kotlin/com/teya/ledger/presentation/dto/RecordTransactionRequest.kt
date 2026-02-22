@@ -5,7 +5,7 @@ import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
 import java.math.BigDecimal
 
-data class RecordTransactionApiRequest(
+data class RecordTransactionRequest(
     @field:NotNull(message = "Transaction type is required")
     val type: TransactionType,
 

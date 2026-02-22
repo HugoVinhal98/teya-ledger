@@ -30,6 +30,7 @@ class LedgerService(
             type = transaction.type,
             amount = transaction.amount,
             timestamp = transaction.timestamp,
+            updatedBalance = transaction.updatedBalance
         )
     }
 
@@ -49,6 +50,7 @@ class LedgerService(
                     type = transaction.type,
                     amount = transaction.amount,
                     timestamp = transaction.timestamp,
+                    updatedBalance = transaction.updatedBalance
                 )
             }
         )

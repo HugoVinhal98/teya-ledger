@@ -44,6 +44,7 @@ class LedgerServiceTest {
         assertThat(response.type).isEqualTo(TransactionType.DEPOSIT)
         assertThat(response.amount).isEqualTo(validatedTransaction.unwrap().amount)
         assertThat(response.transactionId).isEqualTo(validatedTransaction.unwrap().id)
+        assertThat(response.updatedBalance).isEqualTo(validatedTransaction.unwrap().updatedBalance)
         verify(exactly = 1) { ledgerRepository.getBalance() }
         verify(exactly = 1) { transactionFactory.create(TransactionType.DEPOSIT, command.amount, currentBalance) }
         verify(exactly = 1) { ledgerRepository.save(validatedTransaction) }
@@ -71,6 +72,7 @@ class LedgerServiceTest {
         assertThat(response.type).isEqualTo(TransactionType.WITHDRAWAL)
         assertThat(response.amount).isEqualTo(validatedTransaction.unwrap().amount)
         assertThat(response.transactionId).isEqualTo(validatedTransaction.unwrap().id)
+        assertThat(response.updatedBalance).isEqualTo(validatedTransaction.unwrap().updatedBalance)
         verify(exactly = 1) { ledgerRepository.getBalance() }
         verify(exactly = 1) { transactionFactory.create(TransactionType.WITHDRAWAL, command.amount, currentBalance) }
         verify(exactly = 1) { ledgerRepository.save(validatedTransaction) }
@@ -118,9 +120,11 @@ class LedgerServiceTest {
         assertThat(response.transactions[0].transactionId).isEqualTo(transaction1.id)
         assertThat(response.transactions[0].type).isEqualTo(transaction1.type)
         assertThat(response.transactions[0].amount).isEqualTo(transaction1.amount)
+        assertThat(response.transactions[0].updatedBalance).isEqualTo(transaction1.updatedBalance)
         assertThat(response.transactions[1].transactionId).isEqualTo(transaction2.id)
         assertThat(response.transactions[1].type).isEqualTo(transaction2.type)
         assertThat(response.transactions[1].amount).isEqualTo(transaction2.amount)
+        assertThat(response.transactions[1].updatedBalance).isEqualTo(transaction2.updatedBalance)
         verify(exactly = 1) { ledgerRepository.getTransactionHistory() }
     }
 
