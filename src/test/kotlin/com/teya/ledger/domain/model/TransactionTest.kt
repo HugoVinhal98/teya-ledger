@@ -99,7 +99,7 @@ class TransactionTest {
         val exception = assertThrows<InsufficientFundsException> {
             transaction.validate()
         }
-        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of $negativeBalance.")
+        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of ${transaction.amount}.")
     }
 
     @Test
@@ -115,7 +115,7 @@ class TransactionTest {
         val exception = assertThrows<InsufficientFundsException> {
             transaction.validate()
         }
-        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of $smallNegativeBalance.")
+        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of ${transaction.amount}.")
     }
 
     @Test

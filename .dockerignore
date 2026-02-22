@@ -1,0 +1,5 @@
+.gradle/
+.idea/
+.git/
+build/*
+!build/libs/ledger-0.0.1-SNAPSHOT.jar

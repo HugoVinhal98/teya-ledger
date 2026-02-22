@@ -22,7 +22,7 @@ class LedgerController(
 ) {
     @PostMapping("/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Record a transaction", description = "Record a deposit or withdrawal transaction")
+    @Operation(summary = "Record a transaction", description = "Record a DEPOSIT or WITHDRAWAL transaction")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Transaction recorded successfully"),

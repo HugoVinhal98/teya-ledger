@@ -27,7 +27,7 @@ data class Transaction(
 
     private fun validateUpdatedBalance() {
         if (updatedBalance < BigDecimal.ZERO) {
-            throw InsufficientFundsException(updatedBalance)
+            throw InsufficientFundsException(amount)
         }
     }
 }
