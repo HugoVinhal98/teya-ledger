@@ -14,11 +14,13 @@ object TransactionTestDataFactory {
         type: TransactionType = TransactionType.entries.random(),
         amount: BigDecimal = BigDecimal.TWO,
         timestamp: LocalDateTime = LocalDateTime.now(),
+        updatedBalance: BigDecimal = BigDecimal.TEN,
     ) = Transaction(
         id = id,
         type = type,
         amount = amount,
         timestamp = timestamp,
+        updatedBalance = updatedBalance,
     )
 
     fun createValid(
@@ -26,21 +28,12 @@ object TransactionTestDataFactory {
         type: TransactionType = TransactionType.entries.random(),
         amount: BigDecimal = BigDecimal.TWO,
         timestamp: LocalDateTime = LocalDateTime.now(),
+        updatedBalance: BigDecimal = BigDecimal.TEN,
     ) = Validated(create(
         id = id,
         type = type,
         amount = amount,
         timestamp = timestamp,
+        updatedBalance = updatedBalance,
     ))
-
-    fun createValidDeposit(
-        id: UUID = UUID.randomUUID(),
-        amount: BigDecimal = BigDecimal.TWO,
-        timestamp: LocalDateTime = LocalDateTime.now(),
-    ) = createValid(
-        id = id,
-        type = TransactionType.DEPOSIT,
-        amount = amount,
-        timestamp = timestamp,
-    )
 }

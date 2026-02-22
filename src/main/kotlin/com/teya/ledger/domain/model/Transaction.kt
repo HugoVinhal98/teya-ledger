@@ -12,14 +12,22 @@ data class Transaction(
     val type: TransactionType,
     val amount: BigDecimal,
     val timestamp: LocalDateTime,
+    val updatedBalance: BigDecimal
 ) : Validatable {
     override fun validate() {
         validateAmount()
+        validateUpdatedBalance()
     }
 
     private fun validateAmount() {
         if (amount < BigDecimal.ZERO) {
             throw InvalidAmountException(amount)
+        }
+    }
+
+    private fun validateUpdatedBalance() {
+        if (updatedBalance < BigDecimal.ZERO) {
+            throw InsufficientFundsException(updatedBalance)
         }
     }
 }

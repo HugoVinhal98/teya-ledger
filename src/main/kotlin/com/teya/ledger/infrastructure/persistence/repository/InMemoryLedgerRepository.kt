@@ -1,4 +1,4 @@
-package com.teya.ledger.infrastructure.persistence
+package com.teya.ledger.infrastructure.persistence.repository
 
 import com.teya.ledger.domain.exception.InsufficientFundsException
 import com.teya.ledger.domain.model.Transaction
@@ -9,23 +9,15 @@ import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 
 @Repository
-class InMemoryLedgerRepository : LedgerRepository {
+class InMemoryLedgerRepository: LedgerRepository {
+
     private var balance: BigDecimal = BigDecimal.ZERO
     private val transactions: MutableList<Transaction> = mutableListOf()
 
     override fun save(transaction: Validated<Transaction>) {
-        val unwrappedTransaction = transaction.unwrap()
-        val updatedBalance = when (unwrappedTransaction.type) {
-            TransactionType.DEPOSIT -> balance.add(unwrappedTransaction.amount)
-            TransactionType.WITHDRAWAL -> balance.subtract(unwrappedTransaction.amount)
-        }
+        transactions.add(transaction.unwrap())
 
-        if (updatedBalance < BigDecimal.ZERO) {
-            throw InsufficientFundsException(unwrappedTransaction.amount)
-        }
-
-        balance = updatedBalance
-        transactions.add(unwrappedTransaction)
+        balance = transaction.unwrap().updatedBalance
     }
 
     override fun getBalance(): BigDecimal {

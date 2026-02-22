@@ -13,12 +13,19 @@ class TransactionFactory {
     fun create(
         type: TransactionType,
         amount: BigDecimal,
+        currentBalance: BigDecimal
     ): Validated<Transaction> {
+        val updatedBalance = when (type) {
+            TransactionType.DEPOSIT -> currentBalance + amount
+            TransactionType.WITHDRAWAL -> currentBalance - amount
+        }
+
         val transaction = Transaction(
             id = UUID.randomUUID(),
             type = type,
             amount = amount,
             timestamp = LocalDateTime.now(),
+            updatedBalance = updatedBalance
         )
         return Validated(transaction)
     }
