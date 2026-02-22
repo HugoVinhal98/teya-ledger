@@ -3,11 +3,11 @@ package com.teya.ledger.domain.model
 import com.teya.ledger.domain.exception.InsufficientFundsException
 import com.teya.ledger.domain.exception.InvalidAmountException
 import com.teya.ledger.testing.testdatafactories.TransactionTestDataFactory
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
-import kotlin.test.assertEquals
 
 class TransactionTest {
 
@@ -67,7 +67,7 @@ class TransactionTest {
         val exception = assertThrows<InvalidAmountException> {
             transaction.validate()
         }
-        assertEquals("Invalid amount: the amount of $negativeAmount is not valid. Amount must be a non negative value.", exception.message)
+        assertThat(exception.message).isEqualTo("Invalid amount: the amount of $negativeAmount is not valid. Amount must be a non negative value.")
     }
 
     @Test
@@ -83,7 +83,7 @@ class TransactionTest {
         val exception = assertThrows<InvalidAmountException> {
             transaction.validate()
         }
-        assertEquals("Invalid amount: the amount of $smallNegativeAmount is not valid. Amount must be a non negative value.", exception.message)
+        assertThat(exception.message).isEqualTo("Invalid amount: the amount of $smallNegativeAmount is not valid. Amount must be a non negative value.")
     }
 
     @Test
@@ -99,7 +99,7 @@ class TransactionTest {
         val exception = assertThrows<InsufficientFundsException> {
             transaction.validate()
         }
-        assertEquals("Insufficient funds: you don't have the funds for the requested withdrawal of $negativeBalance.", exception.message)
+        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of $negativeBalance.")
     }
 
     @Test
@@ -115,7 +115,7 @@ class TransactionTest {
         val exception = assertThrows<InsufficientFundsException> {
             transaction.validate()
         }
-        assertEquals("Insufficient funds: you don't have the funds for the requested withdrawal of $smallNegativeBalance.", exception.message)
+        assertThat(exception.message).isEqualTo("Insufficient funds: you don't have the funds for the requested withdrawal of $smallNegativeBalance.")
     }
 
     @Test
@@ -132,6 +132,6 @@ class TransactionTest {
         val exception = assertThrows<InvalidAmountException> {
             transaction.validate()
         }
-        assertEquals("Invalid amount: the amount of $negativeAmount is not valid. Amount must be a non negative value.", exception.message)
+        assertThat(exception.message).isEqualTo("Invalid amount: the amount of $negativeAmount is not valid. Amount must be a non negative value.")
     }
 }

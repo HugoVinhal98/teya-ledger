@@ -1,10 +1,9 @@
 package com.teya.ledger.domain.factory
 
 import com.teya.ledger.domain.model.TransactionType
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class TransactionFactoryTest {
 
@@ -26,12 +25,12 @@ class TransactionFactoryTest {
 
         // Then
         val transaction = validatedTransaction.unwrap()
-        assertNotNull(transaction)
-        assertEquals(type, transaction.type)
-        assertEquals(depositAmount, transaction.amount)
-        assertNotNull(transaction.id)
-        assertNotNull(transaction.timestamp)
-        assertEquals( BigDecimal("150.00"), transaction.updatedBalance)
+        assertThat(transaction).isNotNull()
+        assertThat(transaction.type).isEqualTo(type)
+        assertThat(transaction.amount).isEqualTo(depositAmount)
+        assertThat(transaction.id).isNotNull()
+        assertThat(transaction.timestamp).isNotNull()
+        assertThat(transaction.updatedBalance).isEqualTo(BigDecimal("150.00"))
     }
 
     @Test
@@ -50,11 +49,11 @@ class TransactionFactoryTest {
 
         // Then
         val transaction = validatedTransaction.unwrap()
-        assertNotNull(transaction)
-        assertEquals(type, transaction.type)
-        assertEquals(withdrawalAmount, transaction.amount)
-        assertNotNull(transaction.id)
-        assertNotNull(transaction.timestamp)
-        assertEquals( BigDecimal("50.00"), transaction.updatedBalance)
+        assertThat(transaction).isNotNull()
+        assertThat(transaction.type).isEqualTo(type)
+        assertThat(transaction.amount).isEqualTo(withdrawalAmount)
+        assertThat(transaction.id).isNotNull()
+        assertThat(transaction.timestamp).isNotNull()
+        assertThat(transaction.updatedBalance).isEqualTo(BigDecimal("50.00"))
     }
 }

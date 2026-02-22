@@ -2,14 +2,11 @@ package com.teya.ledger.infrastructure.persistence.repository
 
 import com.teya.ledger.domain.model.TransactionType
 import com.teya.ledger.testing.testdatafactories.TransactionTestDataFactory
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class InMemoryLedgerRepositoryTest {
 
@@ -26,7 +23,7 @@ class InMemoryLedgerRepositoryTest {
         val balance = repository.getBalance()
 
         // Then
-        assertEquals(BigDecimal.ZERO, balance)
+        assertThat(balance).isEqualTo(BigDecimal.ZERO)
     }
 
     @Test
@@ -35,7 +32,7 @@ class InMemoryLedgerRepositoryTest {
         val history = repository.getTransactionHistory()
 
         // Then
-        assertTrue(history.isEmpty())
+        assertThat(history).isEmpty()
     }
 
     @Test
@@ -47,7 +44,7 @@ class InMemoryLedgerRepositoryTest {
         repository.save(transaction)
 
         // Then
-        assertEquals(transaction.unwrap().updatedBalance, repository.getBalance())
+        assertThat(repository.getBalance()).isEqualTo(transaction.unwrap().updatedBalance)
     }
 
     @Test
@@ -61,7 +58,7 @@ class InMemoryLedgerRepositoryTest {
         repository.save(withdrawalTransaction)
 
         // Then
-        assertEquals(withdrawalTransaction.unwrap().updatedBalance, repository.getBalance())
+        assertThat(repository.getBalance()).isEqualTo(withdrawalTransaction.unwrap().updatedBalance)
     }
 
     @Test
@@ -83,7 +80,7 @@ class InMemoryLedgerRepositoryTest {
         repository.save(thirdTransaction)
 
         // Then
-        assertEquals(BigDecimal("120.00"), repository.getBalance())
+        assertThat(repository.getBalance()).isEqualTo(BigDecimal("120.00"))
     }
 
     @Test
@@ -96,8 +93,8 @@ class InMemoryLedgerRepositoryTest {
         val history = repository.getTransactionHistory()
 
         // Then
-        assertEquals(1, history.size)
-        assertEquals(transaction.unwrap(), history[0])
+        assertThat(history).hasSize(1)
+        assertThat(history[0]).isEqualTo(transaction.unwrap())
     }
 
     @Test
@@ -121,9 +118,9 @@ class InMemoryLedgerRepositoryTest {
         val history = repository.getTransactionHistory()
 
         // Then
-        assertEquals(recentTransaction.unwrap(), history[0])
-        assertEquals(middleTransaction.unwrap(), history[1])
-        assertEquals(oldTransaction.unwrap(), history[2])
+        assertThat(history[0]).isEqualTo(recentTransaction.unwrap())
+        assertThat(history[1]).isEqualTo(middleTransaction.unwrap())
+        assertThat(history[2]).isEqualTo(oldTransaction.unwrap())
     }
 
     @Test
@@ -162,7 +159,7 @@ class InMemoryLedgerRepositoryTest {
 
         // Then
         val actualHistory = repository.getTransactionHistory()
-        assertEquals(1, actualHistory.size)
-        assertEquals(transaction.unwrap(), actualHistory[0])
+        assertThat(actualHistory).hasSize(1)
+        assertThat(actualHistory[0]).isEqualTo(transaction.unwrap())
     }
 }
